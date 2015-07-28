@@ -3,8 +3,8 @@ Contributors: szepe.viktor
 Donate link: https://szepe.net/wp-donate/
 Tags: google, robot, robots, robots.txt, search, seo, crawlers, spiders, editor
 Requires at least: 3.8
-Tested up to: 4.0
-Stable tag: 0.2
+Tested up to: 4.2.3
+Stable tag: 0.2.1
 License: GPLv2
 
 Customize your site's robots.txt and include remote content to it
@@ -46,6 +46,10 @@ This section describes how to install the plugin and get it working.
 Every 24 hours and when you press the Sava Changes button on the setting page.
 
 == Changelog ==
+
+= 0.2 =
+* Googlebot needs CSS and JS files
+* Introducing semver
 
 = 0.2 =
 * Fixed some serious PHP Notices, sorry

@@ -3,7 +3,7 @@
 Plugin Name: Multipart robots.txt editor
 Plugin URI: https://github.com/szepeviktor/wordpress-plugin-construction
 Description: Customize your site's robots.txt and include remote content to it
-Version: 0.2
+Version: 0.2.1
 License: The MIT License (MIT)
 Author: Viktor Szépe
 Author URI: http://www.online1.hu/webdesign/
@@ -126,7 +126,10 @@ Crawl-delay: 10
 Disallow: %s/wp-admin/
 Disallow: %1$s/%s/
 
-# all robots
+User-agent: Googlebot
+Disallow: /wp-admin/
+
+# All other robots
 User-agent: *
 Crawl-delay: 10
 Disallow: %1$s/wp-admin/

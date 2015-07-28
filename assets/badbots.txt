@@ -1,53 +1,124 @@
-# language
-User-Agent: ExB Language Crawler
+# You can find an MU-plugin to ban robots not obeying "nofollow" rules here: https://github.com/szepeviktor/wordpress-plugin-construction/blob/master/mu-nofollow-robot-trap/nofollow-robot-trap.php
+
+# 2015.07.28 Googlebot needs JS and CSS
+User-agent: Googlebot
+Disallow: /wp-admin/
+
+# 2015.06.27 crawler for SentiOne
+User-agent: sentibot
 Disallow: /
 
-# seo
-User-Agent: sistrix
+# 2015.04.06 SEO indexer
+User-agent: MegaIndex.ru/2.0
+Disallow: /
+User-agent: MegaIndex.ru
 Disallow: /
 
-# seo
-User-agent: spbot
+# 2015.02.10 AdvBot "classify web content"
+User-agent: AdvBot
 Disallow: /
 
-# seo moz
-User-agent: Ezooms
+# 2015.01.30 XoviBot SEO bot
+User-agent: XoviBot
 Disallow: /
 
-# news portal
-User-agent: Mail.Ru
+# 2015.02.19 ??? parked domain
+User-agent: publiclibraryarchive.org
 Disallow: /
 
-# Apache Nutch based
-User-agent: Nutch
+# 2014.12.26. Internet Memory Research
+User-agent: memoryBot
 Disallow: /
 
-# news
-User-agent: FeedBooster
+# 2014.09.26. SimilarTech, Lead Generation, Competitive Intelligence based on Web Tech Analysis
+User-agent: SMTBot
 Disallow: /
 
-# search engine www.sengine.info
-User-agent: netEstate NE Crawler
+# 2014.09.26. XOVI Suite, SEO & Online Marketing Tool
+User-agent: XoviBot
 Disallow: /
 
-# plagiarism check
-User-agent: turnitinbot
+# 2014.09.18. WebSearch
+User-agent: Abonti
 Disallow: /
 
-# seo
-User-agent: SiteExplorer
+# 2014.09.11. The web search API
+User-agent: meanpathbot
+Disallow: /
+
+
+# entries without date
+
+# SEO services
+User-agent: SearchmetricsBot
+Disallow: /
+
+# panscient.com
+User-agent: panscient.com
+Disallow: /
+
+# tiscali.it search bot
+User-agent: IstellaBot
 Disallow: /
 
 # search engine
-User-agent: wotbox
+User-agent: EasouSpider
+Disallow: /
+
+# search engine
+User-agent: Aboundexbot
+Disallow: /
+
+# Mixdata : data for big business
+User-agent: MixBot
+Disallow: /
+
+# chinese search engine
+User-agent: EasouSpider
+Disallow: /
+
+# chinese search engine
+User-agent: sogou spider
+Disallow: /
+
+# scalable, fully distributed crawler
+User-agent: BUbiNG
+Disallow: /
+
+# ??? search engine
+User-agent: LinkpadBot
+Disallow: /
+
+# search engine
+User-agent: Aboundexbot
+Disallow: /
+
+# the Internet Archive's open-source, extensible, scalable, archival-quality Web crawler
+User-agent: heritrix
+Disallow: /
+
+# kostenlose Backlinkchecker von Torsten Rückert Internetdiestleistungen
+User-agent: SEOkicks-Robot
+Disallow: /
+
+# part of Ware Bay Best Buys Search engine
+User-agent: WBSearchBot
+Disallow: /
+
+# Web crawler
+User-agent: ScreenerBot
+Disallow: /
+
+# analyses the structure of the WWW
+User-Agent: UnisterBot
+Disallow: /
+
+# search engine
+User-agent: SeznamBot
 Disallow: /
 
 # seo
-User-agent: BLEXBot
-Disallow: /
-
-# seo
-User-agent: lipperhey
+User-agent: SemrushBot
 Disallow: /
 
 # brand protection
@@ -55,77 +126,53 @@ User-agent: BPImageWalker/2.0
 Disallow: /
 
 # seo
-User-agent: SemrushBot
+User-agent: lipperhey
+Disallow: /
+
+# seo
+User-agent: BLEXBot
 Disallow: /
 
 # search engine
-User-agent: SeznamBot
+User-agent: wotbox
 Disallow: /
 
-# "analyses the structure of the WWW"
-User-Agent: UnisterBot
+# seo
+User-agent: SiteExplorer
 Disallow: /
 
-# Web crawler
-User-agent: ScreenerBot
+# plagiarism check
+User-agent: turnitinbot
 Disallow: /
 
-# part of Ware Bay Best Buys Search engine
-User-agent: WBSearchBot
+# search engine www.sengine.info
+User-agent: netEstate NE Crawler
 Disallow: /
 
-# kostenlose Backlinkchecker von Torsten Rückert Internetdiestleistungen
-User-agent: SEOkicks-Robot
+# news
+User-agent: FeedBooster
 Disallow: /
 
-# the Internet Archive's open-source, extensible, scalable, archival-quality Web crawler
-User-agent: heritrix
+# Apache Nutch based
+User-agent: Nutch
 Disallow: /
 
-# search engine
-User-agent: Aboundexbot
+# news portal
+User-agent: Mail.Ru
 Disallow: /
 
-# ??? search engine
-User-agent: LinkpadBot
+# seo moz
+User-agent: Ezooms
 Disallow: /
 
-# scalable, fully distributed crawler
-User-agent: BUbiNG
+# seo
+User-agent: spbot
 Disallow: /
 
-# chinese search engine
-User-agent: sogou spider
+# seo
+User-Agent: sistrix
 Disallow: /
 
-# chinese search engine
-User-agent: EasouSpider
-Disallow: /
-
-# Mixdata : data for big business
-User-agent: MixBot
-Disallow: /
-
-# search engine
-User-agent: Aboundexbot
-Disallow: /
-
-# search engine
-User-agent: EasouSpider
-Disallow: /
-
-# tiscali.it search bot
-User-agent: IstellaBot
-Disallow: /
-
-# panscient.com
-User-agent: panscient.com
-Disallow: /
-
-# SEO services
-User-agent: SearchmetricsBot
-Disallow: /
-
-# The web search API
-User-agent: meanpathbot
+# language
+User-Agent: ExB Language Crawler
 Disallow: /
