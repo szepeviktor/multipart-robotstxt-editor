@@ -30,7 +30,9 @@ E.g. you have several sites and want to use a centralized robots.txt.
 - add an admin notice for subdir installs (robots.txt is useless in a subdir)
 - 'At least one "Disallow" field must be present in the robots.txt file.' - check for that
 
-[GitHub repo](https://github.com/szepeviktor/wordpress-plugin-construction/tree/master/multipart-robotstxt-editor)
+= Links =
+
+Development of this plugin goes on on [GitHub](https://github.com/szepeviktor/multipart-robotstxt-editor).
 
 == Installation ==
 
@@ -47,7 +49,7 @@ Every 24 hours and when you press the Sava Changes button on the setting page.
 
 == Changelog ==
 
-= 0.2 =
+= 0.2.1 =
 * Googlebot needs CSS and JS files
 * Introducing semver
 

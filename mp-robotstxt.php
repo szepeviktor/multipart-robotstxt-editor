@@ -1,22 +1,24 @@
 <?php
 /*
 Plugin Name: Multipart robots.txt editor
-Plugin URI: https://github.com/szepeviktor/wordpress-plugin-construction
+Plugin URI: https://github.com/szepeviktor/multipart-robotstxt-editor
 Description: Customize your site's robots.txt and include remote content to it
 Version: 0.2.1
 License: The MIT License (MIT)
 Author: Viktor Szépe
 Author URI: http://www.online1.hu/webdesign/
+GitHub Plugin URI: https://github.com/szepeviktor/multipart-robotstxt-editor
 */
 
 if ( ! function_exists( 'add_filter' ) ) {
-    // for fail2ban
-    error_log( 'File does not exist: errorlog_direct_access '
-        . esc_url( $_SERVER['REQUEST_URI'] ) );
+    // For fail2ban
+    error_log( 'Break-in attempt detected: mprtxt_direct_access '
+        . addslashes( @$_SERVER['REQUEST_URI'] ) );
 
     ob_get_level() && ob_end_clean();
     header( 'Status: 403 Forbidden' );
-    header( 'HTTP/1.1 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden', true, 403 );
+    header( 'Connection: Close' );
     exit();
 }
 
@@ -83,7 +85,7 @@ class Multipart_Robotstxt {
 
         $robotstxt = $this->join_any_robot_records( $robotstxt );
 
-        // prevent empty robots.txt
+        // Prevent empty robots.txt
         if ( '' == trim( $robotstxt ) )
             $robotstxt = $this->core_robots() . $this->do_robots();
 
@@ -112,7 +114,7 @@ class Multipart_Robotstxt {
 <p>More information on robots.txt in <a href="http://www.w3.org/TR/html4/appendix/notes.html#h-B.4.1.1" target="_blank">World Wide Web Consortium Recommendation</a>,
 <a href="https://developers.google.com/webmasters/control-crawl-index/docs/robots_txt" target="_blank">Google\'s Robots.txt Specifications</a>,
 <a href="http://moz.com/learn/seo/robotstxt" target="_blank">What is Robots.txt? by MOZ</a>.</p>
-<p><a href="https://github.com/szepeviktor/wordpress-plugin-construction/tree/master/multipart-robotstxt-editor/" target="_blank"
+<p><a href="https://github.com/szepeviktor/multipart-robotstxt-editor" target="_blank"
 >List of useful robots\' user agent IDs</a>,
 and an up-to-date ,
 recommended sitemaps: <a href="http://smythies.com/robots.txt" target="_blank">smythies.com</a>,
@@ -124,7 +126,6 @@ recommended sitemaps: <a href="http://smythies.com/robots.txt" target="_blank">s
         $manual_records_default = sprintf( 'User-agent: MJ12bot
 Crawl-delay: 10
 Disallow: %s/wp-admin/
-Disallow: %1$s/%s/
 
 User-agent: Googlebot
 Disallow: /wp-admin/
@@ -133,13 +134,11 @@ Disallow: /wp-admin/
 User-agent: *
 Crawl-delay: 10
 Disallow: %1$s/wp-admin/
-Disallow: %1$s/%2$s/
 
 #Sitemap: %s
 #Sitemap: %s
 ',
             $path,
-            WPINC,
             home_url( 'sitemap.xml' ),
             home_url( 'sitemap_index.xml' )
         );
@@ -216,7 +215,7 @@ Disallow: %1$s/%2$s/
         $content = get_transient( 'mprt_remote_content' );
 
         if ( false === $content ) {
-            // get the remote content again
+            // Get remote content again
             $http_args = array(
                 'timeout'     => 10,
                 'sslverify'   => false
@@ -225,7 +224,7 @@ Disallow: %1$s/%2$s/
             if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
                 $content = wp_remote_retrieve_body( $response );
             } else {
-                // fallback to default robots.txt
+                // Fallback to default robots.txt
                 $content = $this->core_robots() . $this->do_robots();
             }
 
@@ -239,7 +238,7 @@ Disallow: %1$s/%2$s/
      * Clean up old transient on plugin option update.
      *
      */
-    public function purge_remote( $new, $old) {
+    public function purge_remote( $new, $old ) {
 
         delete_transient( 'mprt_remote_content' );
         return $new;
@@ -260,10 +259,10 @@ Disallow: %1$s/%2$s/
         $buffer = '';
         $lines = preg_split( '/\n|\r\n?/', $robotstxt );
 
-        // find records
+        // Find records
         foreach ( $lines as $line ) {
             if ( '' == trim( $line ) && ! empty( $buffer ) ) {
-                //FIXME "User-agent: crawler\nUser-agent: *\nDisallow: /url" is not handled
+                // @FIXME "User-agent: crawler\nUser-agent: *\nDisallow: /url" is not handled
                 if ( 1 === preg_match( '/\s*User-agent:\s*\*\s*/i', $buffer ) ) {
                     $any_records[] = $buffer;
                 } else {
@@ -271,25 +270,26 @@ Disallow: %1$s/%2$s/
                 }
                 $buffer = '';
             } else {
-                //FIXME: $buffer = array(); array_unique() when put to $any/records
+                // @FIXME $buffer = array(); array_unique() when put to $any/records
                 $buffer .= $line . PHP_EOL;
             }
         }
-        // add an empty line at the end
+        // Add an empty line at the end
         if ( ! empty( $records ) )
             $records[] = '';
 
-        // remove every line "User-agent:" in it
+        // Remove every line "User-agent:" in it
         $any_policies = preg_replace( '/(^|\n|\r\n?)\s*User-agent:.*(\n|\r\n?)/i', '\\1', $any_records );
-        // drop comment lines
+        // Drop comment lines
         $any_policies = preg_replace( '/(^|\n|\r\n?)\s*#.*(\n|\r\n?)/i', '\\1', $any_policies );
 
-        // 'any' policies
+        // 'any' (*) policies
         $any_string = '';
         $any_count = count( $any_records );
         if ( $any_count > 0 ) {
-            if ( $any_count > 1 )
+            if ( $any_count > 1 ) {
                 $any_string .= '# ' . $any_count . ' record(s) for any robot joined' .  PHP_EOL;
+            }
             $any_string .= 'User-agent: *' . PHP_EOL
                 . implode( '', $any_policies ) . PHP_EOL;
         }
@@ -362,7 +362,6 @@ Disallow: %1$s/%2$s/
 
     /**
      * Set default settings on plugin activation.
-     *
      */
     public function activation() {
 
@@ -378,7 +377,6 @@ Disallow: %1$s/%2$s/
 
     /**
      * Delete settings on plugin deletion based on the forget_records option.
-     *
      */
     static function uninstall() {
 
