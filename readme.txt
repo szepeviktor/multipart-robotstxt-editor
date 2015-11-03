@@ -4,7 +4,7 @@ Donate link: https://szepe.net/wp-donate/
 Tags: google, robot, robots, robots.txt, search, seo, crawlers, spiders, editor
 Requires at least: 3.8
 Tested up to: 4.2.3
-Stable tag: 0.2.1
+Stable tag: 0.2.2
 License: GPLv2
 
 Customize your site's robots.txt and include remote content to it
@@ -22,6 +22,12 @@ E.g. you have several sites and want to use a centralized robots.txt.
 - Include or exclude plugins - e.g. sitemap plugins - output to robots.txt (filter output)
 - Include or exclude a remote text file (the common part)
 - Include or exclude custom records from the settings page (the site specific part)
+
+= Where is robot.txt? =
+
+WordPress handles robots.txt as a virtual URL - just the same way as posts and pages.
+
+So when you browse to `https://example.com/robots.txt` WordPress generates robots.txt on the fly.
 
 = TODO =
 
@@ -43,11 +49,20 @@ This section describes how to install the plugin and get it working.
 
 == Frequently Asked Questions ==
 
+= Where is robot.txt? Why isn't it generated at WordPress root directory? =
+
+WordPress handles robots.txt as a virtual URL - just the same way as posts and pages.
+
+So when you browse to `https://example.com/robots.txt` WordPress generates robots.txt on the fly.
+
 = How often will be the remote text file downloaded? =
 
 Every 24 hours and when you press the Sava Changes button on the setting page.
 
 == Changelog ==
+
+= 0.2.2 =
+* Added explanation about robots.txt file - NO code change
 
 = 0.2.1 =
 * Googlebot needs CSS and JS files

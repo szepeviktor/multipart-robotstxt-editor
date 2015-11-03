@@ -1,12 +1,11 @@
 <?php
 /*
 Plugin Name: Multipart robots.txt editor
-Plugin URI: https://github.com/szepeviktor/multipart-robotstxt-editor
+Version: 0.2.2
 Description: Customize your site's robots.txt and include remote content to it
-Version: 0.2.1
+Plugin URI: https://github.com/szepeviktor/multipart-robotstxt-editor
 License: The MIT License (MIT)
 Author: Viktor Szépe
-Author URI: http://www.online1.hu/webdesign/
 GitHub Plugin URI: https://github.com/szepeviktor/multipart-robotstxt-editor
 */
 
