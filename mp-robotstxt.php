@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Multipart robots.txt editor
-Version: 0.2.2
+Version: 0.3.0
 Description: Customize your site's robots.txt and include remote content to it
 Plugin URI: https://github.com/szepeviktor/multipart-robotstxt-editor
 License: The MIT License (MIT)
@@ -64,29 +64,32 @@ class Multipart_Robotstxt {
         }
 
         $robotstxt = '';
-        $separator =  PHP_EOL . '################' . PHP_EOL . PHP_EOL;
 
         if ( $options['enable_core_robotstxt_hook'] ) {
-            $robotstxt .= trim( $this->core_robots() ) . $separator;
+            $robotstxt .= trim( $this->core_robots() ) . PHP_EOL;
         }
 
         if ( $options['enable_plugin_robotstxt_hook'] ) {
-            $robotstxt .= trim( $this->do_robots() ) . $separator;
+            $robotstxt .= trim( $this->do_robots() ) . PHP_EOL;
         }
 
         if ( $options['enable_remote_url'] ) {
-            $robotstxt .= trim( $this->get_transient( $options['remote_url'] ) ) . $separator;
+            $robotstxt .= trim( $this->get_transient( $options['remote_url'] ) ) . PHP_EOL;
         }
 
         if ( $options['enable_manual_records'] ) {
-            $robotstxt .= trim( $options['manual_records'] ) . $separator;
+            $robotstxt .= trim( $options['manual_records'] ) . PHP_EOL;
         }
 
-        $robotstxt = $this->join_any_robot_records( $robotstxt );
+        // Prettify
+        require_once 'includes/robotstxtparser.php';
+        $parser = new RobotsTxtParser( $robotstxt );
+        $robotstxt = $parser->render();
 
         // Prevent empty robots.txt
-        if ( '' == trim( $robotstxt ) )
+        if ( '' == trim( $robotstxt ) ) {
             $robotstxt = $this->core_robots() . $this->do_robots();
+        }
 
         print $robotstxt;
     }
@@ -337,6 +340,7 @@ Disallow: %1$s/wp-admin/
             $site_url = parse_url( site_url() );
             $path = ( ! empty( $site_url['path'] ) ) ? $site_url['path'] : '';
             $output .= "Disallow: $path/wp-admin/\n";
+            $output .= "Allow: $path/wp-admin/admin-ajax.php\n";
         }
         return $output;
     }
