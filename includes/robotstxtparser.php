@@ -61,7 +61,7 @@ class RobotsTxtParser
     protected $log = array();
 
     // internally used variables
-    protected $current_UserAgent = [];
+    protected $current_UserAgent = array();
     protected $current_word = '';
     protected $current_char = '';
     protected $char_index = 0;
@@ -393,13 +393,13 @@ class RobotsTxtParser
     {
         $ua = mb_strtolower(trim($this->current_word));
         if ($this->previous_directive !== self::DIRECTIVE_USERAGENT) {
-            $this->current_UserAgent = [];
+            $this->current_UserAgent = array();
         }
         $this->current_UserAgent[] = $ua;
 
         // create empty array if not there yet
         if (empty($this->rules[$ua])) {
-            $this->rules[$ua] = [];
+            $this->rules[$ua] = array();
         }
     }
 
@@ -674,7 +674,8 @@ class RobotsTxtParser
     private static function stripUserAgentVersion($userAgent)
     {
         if (strpos($userAgent, '/') !== false) {
-            return explode('/', $userAgent, 2)[0];
+            $tmp = explode('/', $userAgent, 2);
+            return $tmp[0];
         }
         return $userAgent;
     }
@@ -1011,7 +1012,7 @@ class RobotsTxtParser
     {
         $input = $this->getRules();
         krsort($input);
-        $output = [];
+        $output = array();
         foreach ($input as $userAgent => $rules) {
             $output[] = 'User-agent: ' . $userAgent;
             foreach ($rules as $directive => $value) {
