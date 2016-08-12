@@ -10,15 +10,16 @@ GitHub Plugin URI: https://github.com/szepeviktor/multipart-robotstxt-editor
 */
 
 if ( ! function_exists( 'add_filter' ) ) {
-    // For fail2ban
-    error_log( 'Break-in attempt detected: mprtxt_direct_access '
-        . addslashes( @$_SERVER['REQUEST_URI'] ) );
-
+    error_log( 'Break-in attempt detected: mp_robotstxt_direct_access '
+        . addslashes( isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '' )
+    );
     ob_get_level() && ob_end_clean();
-    header( 'Status: 403 Forbidden' );
-    header( 'HTTP/1.1 403 Forbidden', true, 403 );
-    header( 'Connection: Close' );
-    exit();
+    if ( ! headers_sent() ) {
+        header( 'Status: 403 Forbidden' );
+        header( 'HTTP/1.1 403 Forbidden', true, 403 );
+        header( 'Connection: Close' );
+    }
+    exit;
 }
 
 /**
@@ -52,13 +53,13 @@ class Multipart_Robotstxt {
      */
     public function generate() {
 
-        // core do_robots() is removed, restore its functionality
+        // Core do_robots() is removed, restore its functionality
         header( 'Content-Type: text/plain; charset=utf-8' );
         do_action( 'do_robotstxt' );
 
         $options = get_option( 'mprt_records' );
-        if ( ! is_array ( $options ) ) {
-            // use standard WP robots.txt
+        if ( ! is_array( $options ) ) {
+            // Use standard WP robots.txt
             print $this->core_robots() . $this->do_robots();
             return;
         }
@@ -145,65 +146,72 @@ Disallow: %1$s/wp-admin/
             home_url( 'sitemap_index.xml' )
         );
 
-        Voce_Settings_API::GetInstance()->add_page( 'Multipart robots.txt editor', 'Multipart robots.txt', 'mp-robotstxt',
-            'manage_options', $records_page_desc, 'options-general.php', 'no')
+        Voce_Settings_API::GetInstance()->add_page(
+            'Multipart robots.txt editor',
+            'Multipart robots.txt',
+            'mp-robotstxt',
+            'manage_options',
+            $records_page_desc,
+            'options-general.php',
+            'no'
+        )
             ->add_group( 'Parts of robots.txt', 'mprt_records', '', $records_group_desc )
                 ->add_setting( 'Add WordPress core record', 'enable_core_robotstxt_hook', array(
                     'default_value' => true,
                     'display_callback' => 'vs_display_checkbox',
                     'description' => 'Enable or disable this part.',
-                    'sanitize_callbacks' => array( 'vs_sanitize_checkbox' )
+                    'sanitize_callbacks' => array( 'vs_sanitize_checkbox' ),
                 ))->group
                 ->add_setting( 'WordPress core record', 'core_robotstxt_hook', array(
                     'default_value' => $this->core_robots(),
                     'display_callback' => 'vs_display_textarea',
                     'description' => 'This is generated content, <strong>not editable</strong>. It makes up the TOP part of your robots.txt.',
                     'sanitize_callbacks' => array( array( $this, 'sanitize_core_robots_txt' ) ),
-                    'attributes' => array( 'disabled' => true )
+                    'attributes' => array( 'disabled' => true ),
                 ))->group
                 ->add_setting( 'Add plugin and theme generated records', 'enable_plugin_robotstxt_hook', array(
                     'default_value' => true,
                     'display_callback' => 'vs_display_checkbox',
                     'description' => 'Enable or disable this part.',
-                    'sanitize_callbacks' => array( 'vs_sanitize_checkbox' )
+                    'sanitize_callbacks' => array( 'vs_sanitize_checkbox' ),
                 ))->group
                 ->add_setting( 'Plugin and theme generated records', 'plugin_robotstxt_hook', array(
                     'default_value' => $this->do_robots(),
                     'display_callback' => 'vs_display_textarea',
                     'description' => 'This is generated content, <strong>not editable</strong>. It comes after the TOP part of your robots.txt.',
                     'sanitize_callbacks' => array( array( $this, 'sanitize_plugin_robots_txt' ) ),
-                    'attributes' => array( 'disabled' => true )
+                    'attributes' => array( 'disabled' => true ),
                 ))->group
                 ->add_setting( 'Add remote robots.txt', 'enable_remote_url', array(
                     'default_value' => true,
                     'display_callback' => 'vs_display_checkbox',
                     'description' => 'Enable or disable this part.',
-                    'sanitize_callbacks' => array( 'vs_sanitize_checkbox' )
+                    'sanitize_callbacks' => array( 'vs_sanitize_checkbox' ),
                 ))->group
                 ->add_setting( 'URL of the remote robots.txt', 'remote_url', array(
                     'default_value' => plugins_url( 'assets/badbots.txt', __FILE__ ),
                     'description' => 'The records from this file is updated <strong>every day</strong>. <a href="http://www.szepe.net/badbots.txt" target="_blank">List of bad bots</a>. This makes up the MIDDLE part.',
-                    'sanitize_callbacks' => array( 'vs_sanitize_url' )
+                    'sanitize_callbacks' => array( 'vs_sanitize_url' ),
                 ))->group
                 ->add_setting( 'Add custom records', 'enable_manual_records', array(
                     'default_value' => true,
                     'display_callback' => 'vs_display_checkbox',
                     'description' => 'Enable or disable this part.',
-                    'sanitize_callbacks' => array( 'vs_sanitize_checkbox' )
+                    'sanitize_callbacks' => array( 'vs_sanitize_checkbox' ),
                 ))->group
                 ->add_setting( 'Custom records', 'manual_records', array(
                     'default_value' => $manual_records_default,
                     'display_callback' => 'vs_display_textarea',
                     'description' => 'Lines starting with a hash sign (#) are comments. This makes up the BOTTOM part.',
-                    'sanitize_callbacks' => array( 'vs_sanitize_text' )
+                    'sanitize_callbacks' => array( 'vs_sanitize_text' ),
                 ))->group->page
             ->add_group( 'Plugin options', 'mprt_plugin' )
                 ->add_setting( 'Delete records on uninstallation', 'forget_records', array(
                     'default_value' => false,
                     'display_callback' => 'vs_display_checkbox',
                     'description' => 'Detele all settings when the plugin is Uninstalled.',
-                    'sanitize_callbacks' => array( 'vs_sanitize_checkbox' )
-            ) );
+                    'sanitize_callbacks' => array( 'vs_sanitize_checkbox' ),
+                ));
     }
 
     /**
@@ -220,7 +228,7 @@ Disallow: %1$s/wp-admin/
             // Get remote content again
             $http_args = array(
                 'timeout'     => 10,
-                'sslverify'   => false
+                'sslverify'   => false,
             );
             $response = wp_remote_get( $remote_url, $http_args );
             if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
@@ -277,8 +285,9 @@ Disallow: %1$s/wp-admin/
             }
         }
         // Add an empty line at the end
-        if ( ! empty( $records ) )
+        if ( ! empty( $records ) ) {
             $records[] = '';
+        }
 
         // Remove every line "User-agent:" in it
         $any_policies = preg_replace( '/(^|\n|\r\n?)\s*User-agent:.*(\n|\r\n?)/i', '\\1', $any_records );
@@ -368,14 +377,16 @@ Disallow: %1$s/wp-admin/
      */
     public function activation() {
 
-        if ( ! current_user_can( 'activate_plugins' ) )
+        if ( ! current_user_can( 'activate_plugins' ) ) {
+
             return;
+        }
 
         delete_transient( 'mprt_remote_content' );
-        $MPRT = new Multipart_Robotstxt();
-        $MPRT->settings();
+        $mprt = new Multipart_Robotstxt();
+        $mprt->settings();
         Voce_Settings_API::GetInstance()->set_defaults( 'mp-robotstxt' );
-        // force? Voce_Settings_API::GetInstance()->set_defaults( 'mp-robotstxt', true );
+        // @TODO force? Voce_Settings_API::GetInstance()->set_defaults( 'mp-robotstxt', true );
     }
 
     /**
@@ -383,16 +394,19 @@ Disallow: %1$s/wp-admin/
      */
     static function uninstall() {
 
-        if ( ! current_user_can( 'activate_plugins' ) )
+        if ( ! current_user_can( 'activate_plugins' ) ) {
+
             return;
+        }
 
         check_admin_referer( 'bulk-plugins' );
 
         $plugin_option = get_option( 'mprt_plugin' );
-        if ( $plugin_option && true == $plugin_option['forget_records'] )
+        if ( $plugin_option && true == $plugin_option['forget_records'] ) {
             delete_option( 'mprt_records' );
             delete_option( 'mprt_plugin' );
             delete_transient( 'mprt_remote_content' );
+        }
     }
 }
 

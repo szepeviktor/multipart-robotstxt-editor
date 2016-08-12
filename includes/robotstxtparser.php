@@ -5,6 +5,7 @@
  *
  * @author Igor Timoshenkov <igor.timoshenkov@gmail.com>
  * @author Jan-Petter Gundersen <europe.jpg@gmail.com>
+ * @license https://github.com/t1gor/Robots.txt-Parser-Class#license
  *
  * Logic schema and signals:
  * @link   https://docs.google.com/document/d/1_rNjxpnUUeJG13ap6cnXM6Sx9ZQtd1ngADXnW9SHJSE
