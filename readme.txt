@@ -4,7 +4,7 @@ Donate link: https://szepe.net/wp-donate/
 Tags: google, robot, robots, robots.txt, search, seo, crawlers, spiders, editor
 Requires at least: 3.8
 Tested up to: 4.5.3
-Stable tag: 0.3.0
+Stable tag: 0.3.1
 License: GPLv2
 
 Customize your site's robots.txt and include remote content to it
@@ -60,6 +60,9 @@ So when you browse to `https://example.com/robots.txt` WordPress generates robot
 Every 24 hours and when you press the Sava Changes button on the setting page.
 
 == Changelog ==
+
+= 0.3.1 =
+* Support PHP 5.3, props. @zomfg
 
 = 0.3.0 =
 * Prettify and sort output (thus the final robots.txt) by [Robots.txt-Parser-Class by @t1gor](https://github.com/t1gor/Robots.txt-Parser-Class)
