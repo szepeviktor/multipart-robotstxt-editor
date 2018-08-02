@@ -94,12 +94,14 @@ class RobotsTxtParser
         $encoding = !empty($encoding) ? $encoding : mb_detect_encoding($content);
         mb_internal_encoding($encoding);
 
+        $content = preg_replace( '/\R/', "\n", $content );
+
         // set content
         $this->content = iconv($encoding, 'UTF-8//IGNORE', $content);
 
         // Ensure that there's a newline at the end of the file, otherwise the
         // last line is ignored
-        $this->content .= PHP_EOL;
+        $this->content .= "\n";
 
         // set default state
         $this->state = self::STATE_ZERO_POINT;
@@ -224,7 +226,7 @@ class RobotsTxtParser
     protected function newLine()
     {
         return in_array(
-            PHP_EOL, array(
+            "\n", array(
                 $this->current_char,
                 $this->current_word
             )
